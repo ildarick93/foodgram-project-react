@@ -15,7 +15,7 @@ class UserRoles:
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=30, unique=True)
-    password = models.CharField(max_length=50)
+    password = models.CharField(min_length=8)
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
