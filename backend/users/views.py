@@ -7,5 +7,6 @@ User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
+    queryset = User.objects.all()
     serializer_class = CustomUserCreateSerializer
     lookup_field = 'username'
