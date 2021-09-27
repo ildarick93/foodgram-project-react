@@ -2,11 +2,11 @@ from django.conf.urls import include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from .views import UserViewSet
+from .views import CustomUserViewSet
 
 router = DefaultRouter()
 
-router.register('users', UserViewSet)
+router.register('users', CustomUserViewSet)
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),
