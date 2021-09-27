@@ -14,11 +14,11 @@ class UserRoles:
 
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=30, unique=True)
-    password = models.CharField(min_length=8)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=30, unique=True, blank=False)
+    password = models.CharField(min_length=8, blank=False)
+    email = models.EmailField(unique=True, blank=False)
+    first_name = models.CharField(max_length=50, blank=False)
+    last_name = models.CharField(max_length=50, blank=False)
     role = models.CharField(
         max_length=20,
         choices=UserRoles.choices,

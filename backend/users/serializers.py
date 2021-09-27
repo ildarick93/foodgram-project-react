@@ -1,19 +1,22 @@
-from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer
 
 from .models import CustomUser
 
+# from rest_framework import serializers
 
-class UserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+
+    class Meta(UserCreateSerializer.Meta):
         model = CustomUser
-        fields = [
+        fields = (
+            'id',
             'username',
             'password',
             'email',
             'first_name',
             'last_name',
-        ]
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
+        )
 
     def create(self, validated_data):
         user = CustomUser(
