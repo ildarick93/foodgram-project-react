@@ -7,20 +7,23 @@ from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'color', 'slug')
-    search_fields = ('name',)
+    search_fields = ('name')
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'measurement_unit')
-    search_fields = ('name',)
+    search_fields = ('name')
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'author', 'text', 'cooking_time')
+    list_display = ('pk', 'name', 'author', 'in_favorites')
     search_fields = ('name', 'author')
-    list_filter = ('name', 'author')
+    list_filter = ('name', 'author', 'tags')
+
+    def in_favorites(self, obj):
+        return obj.is_favorite_for_users.all().count()
 
 
 @admin.register(RecipeTags)
