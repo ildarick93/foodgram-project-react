@@ -11,6 +11,7 @@ djangorestframework==3.11.0             # via -r requirements.in
 django-filter==2.4.0
 djangorestframework-simplejwt==4.3.0
 djoser==2.1.0
+drf-extra-fields
 gunicorn==20.0.4
 idna==2.9                               # via requests
 importlib-metadata==1.6.0               # via pluggy, pytest
