@@ -60,7 +60,7 @@ class Subscription(models.Model):
         on_delete=models.CASCADE,
         related_name='following'
     )
-    interesting_author = models.ForeignKey(
+    author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='followed'
@@ -75,4 +75,4 @@ class Subscription(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.user} follows {self.interesting_author}'
+        return f'{self.user} follows {self.author}'
