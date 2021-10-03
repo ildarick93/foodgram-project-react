@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -48,3 +49,30 @@ class CustomUser(AbstractUser):
     @property
     def is_user(self):
         return self.role == UserRoles.USER
+
+
+User = get_user_model()
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following'
+    )
+    interesting_author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='followed'
+    )
+
+    class Meta:
+        ordering = ['user']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.user} follows {self.interesting_author}'
