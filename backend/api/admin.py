@@ -7,13 +7,13 @@ from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'color', 'slug')
-    search_fields = ('name')
+    search_fields = ('name',)
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'measurement_unit')
-    search_fields = ('name')
+    list_display = ('pk', 'name', 'measurements_unit')
+    search_fields = ('name',)
 
 
 @admin.register(Recipe)
