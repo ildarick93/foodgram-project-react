@@ -8,12 +8,13 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .models import Subscription
-from .serializers import SubscriptionsSerializer
+from .serializers import SubscriptionsSerializer, CustomUserSerializer
 
 User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
+    serializer_class = CustomUserSerializer
 
     @action(detail=False, methods=('GET',))
     def subscriptions(self, request):

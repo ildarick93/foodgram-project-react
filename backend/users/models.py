@@ -3,24 +3,13 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class UserRoles:
-    USER = 'user'
-    ADMIN = 'admin'
-    choices = (
-        (USER, USER),
-        (ADMIN, ADMIN),
-    )
-
-
 class CustomUser(AbstractUser):
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
-    email = models.EmailField(unique=True)
-    role = models.CharField(
-        max_length=20,
-        choices=UserRoles.choices,
-        default=UserRoles.USER
-    )
+    username = models.CharField(max_length=150, unique=True, blank=False)
+    password = models.CharField(max_length=30, blank=False)
+    email = models.EmailField(unique=True, blank=False)
+    first_name = models.CharField(max_length=150, blank=True)
+    last_name = models.CharField(max_length=150, blank=True)
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     class Meta(AbstractUser.Meta):
         ordering = ['username']
