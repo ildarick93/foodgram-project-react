@@ -17,14 +17,6 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.get_full_name()
 
-    @property
-    def is_admin(self):
-        return self.role == UserRoles.ADMIN
-
-    @property
-    def is_user(self):
-        return self.role == UserRoles.USER
-
 
 User = get_user_model()
 

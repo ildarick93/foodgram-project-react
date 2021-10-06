@@ -40,7 +40,7 @@ class Recipe(Model):
     )
     tags = ManyToManyField(
         Tag,
-        through='RecipeTags',
+        through='RecipeTag',
         related_name='recipes')
     image = ImageField(blank=False)
     name = CharField(max_length=200, unique=True, blank=False)
@@ -72,7 +72,7 @@ class IngredientAmountInRecipe(Model):
         return f'Need {self.amount} of {self.ingredient} for {self.recipe}'
 
 
-class RecipeTags(Model):
+class RecipeTag(Model):
     recipe = ForeignKey(Recipe, on_delete=CASCADE)
     tag = ForeignKey(Tag, on_delete=CASCADE)
 

@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .models import Subscription
-from .serializers import SubscriptionsSerializer, CustomUserSerializer
+from .serializers import CustomUserSerializer, SubscriptionsSerializer
 
 User = get_user_model()
 
@@ -35,10 +35,10 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         author = get_object_or_404(User, id=id)
         if user.id == id:
-            raise ValidationError('Нельзя подписаться на себя')
+            raise ValidationError('You can not subscribe to yourself')
         if int(id) in user.subscribed_to.all().values_list(
                 'subscribed_to', flat=True):
-            raise ValidationError('Вы уже подписаны на этого автора')
+            raise ValidationError('You already follow this author')
         else:
             follow = Subscription.objects.create(
                 subscriber=user,

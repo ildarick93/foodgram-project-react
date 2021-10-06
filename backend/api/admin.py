@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
-                     Recipe, RecipeTags, ShoppingList, Tag)
+                     Recipe, RecipeTag, ShoppingList, Tag)
 
 
 @admin.register(Tag)
@@ -26,8 +26,8 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.is_favorite_for_users.all().count()
 
 
-@admin.register(RecipeTags)
-class RecipeTagsAdmin(admin.ModelAdmin):
+@admin.register(RecipeTag)
+class RecipeTagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'recipe', 'tag')
     search_fields = ('recipe', 'tag')
     list_filter = ('recipe', 'tag')
