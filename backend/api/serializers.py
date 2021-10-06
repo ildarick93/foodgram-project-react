@@ -52,3 +52,13 @@ class FavoriteRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteRecipe
         fields = ('user', 'recipe')
+
+
+class ShoppingListSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source='recipe.name')
+    image = Base64ImageField(source='recipe.image')
+    cooking_time = serializers.ReadOnlyField(source='recipe.cooking_time')
+
+    class Meta:
+        model = ShoppingList
+        fields = ('id', 'name', 'image', 'cooking_time')

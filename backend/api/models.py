@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
-from django.db.models import (CASCADE, CharField, ForeignKey, ImageField,
-                              Model, PositiveIntegerField, SlugField,
-                              TextField)
+from django.db.models import (CASCADE, CharField, DateTimeField, ForeignKey,
+                              ImageField, Model, PositiveIntegerField,
+                              SlugField, TextField)
 from django.db.models.fields.related import ManyToManyField
 
 User = get_user_model()
@@ -42,15 +42,16 @@ class Recipe(Model):
         Tag,
         through='RecipeTag',
         related_name='recipes')
-    image = ImageField(blank=False)
+    image = ImageField(upload_to='images/', blank=False)
     name = CharField(max_length=200, unique=True, blank=False)
     text = TextField(blank=False)
     cooking_time = PositiveIntegerField(
         validators=[MinValueValidator(1, 'Cooking time must be > 0')]
     )
+    pub_date = DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-pub_date']
 
     def __str__(self):
         return self.name
