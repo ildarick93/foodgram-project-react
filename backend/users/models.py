@@ -13,16 +13,13 @@ class UserRoles:
 
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=150, unique=True, blank=False)
-    email = models.EmailField(max_length=254, unique=True, blank=False)
-    first_name = models.CharField(max_length=150, blank=False)
-    last_name = models.CharField(max_length=150, blank=False)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'email', 'first_name', 'last_name']
     role = models.CharField(
         max_length=20,
         choices=UserRoles.choices,
         default=UserRoles.USER
     )
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     class Meta(AbstractUser.Meta):
         ordering = ['username']
@@ -43,12 +40,12 @@ User = get_user_model()
 
 
 class Subscription(models.Model):
-    user = models.ForeignKey(
+    subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following'
     )
-    author = models.ForeignKey(
+    subscribed_to = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='followed'
