@@ -53,7 +53,7 @@ class Subscription(models.Model):
 
     class Meta:
         ordering = ['user']
-        unique_together = ['user', 'author']
+        unique_together = ['subscriber', 'subscribed_to']
 
     def __str__(self):
         return f'{self.user} follows {self.author}'
