@@ -14,7 +14,8 @@ class UserRoles:
 
 class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'email', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+    email = models.EmailField(unique=True)
     role = models.CharField(
         max_length=20,
         choices=UserRoles.choices,
@@ -43,17 +44,16 @@ class Subscription(models.Model):
     subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following'
+        related_name='subscribed_to'
     )
     subscribed_to = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='followed'
+        related_name='subscribers'
     )
 
     class Meta:
-        ordering = ['user']
         unique_together = ['subscriber', 'subscribed_to']
 
     def __str__(self):
-        return f'{self.user} follows {self.author}'
+        return f'{self.subscriber} follows {self.subscribed_to}'
