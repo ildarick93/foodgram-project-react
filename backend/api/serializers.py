@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+
+from users.serializers import CustomUserSerializer
 
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
                      Recipe, RecipeTag, ShoppingList, Tag)
@@ -37,12 +40,84 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     image = Base64ImageField()
-    ingredient = IngredientAmountInRecipeSerializer(many=True)
+    ingredient = IngredientAmountInRecipeSerializer(
+        source='ingredient_amount',
+        many=True
+    )
+    author = CustomUserSerializer(read_only=True)
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ('id', 'author', 'ingredients', 'tags', 'image',
-                  'name', 'text', 'cooking_time')
+        fields = ('text', 'author', 'ingredients', 'tags', 'image', 'name',
+                  'id', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
+
+    def _is_in_list(self, model, obj):
+        if not self.context['request'].user.is_authenticated:
+            return False
+        if model.objects.filter(
+            recipe=obj,
+            user=self.context['request'].user
+        ).exists():
+            return True
+        return False
+
+    def get_is_favorited(self, obj):
+        return self._is_in_list(FavoriteRecipe, obj)
+
+    def get_is_in_shopping_cart(self, obj):
+        return self._is_in_list(ShoppingList, obj)
+
+    def create_tags(self, tags, recipe):
+        for tag_id in tags:
+            tag = get_object_or_404(Tag, id=tag_id)
+            RecipeTag.objects.create(tag=tag, recipe=recipe)
+
+    def update_tags(self, tags, recipe):
+        RecipeTag.objects.filter(recipe=recipe).delete()
+        self.create_tags(tags, recipe)
+
+    def create_ingredients(self, ingredients, recipe):
+        for ingredient in ingredients:
+            ingredient_id, amount = ingredient['id'], ingredient['amount']
+            ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
+            IngredientAmountInRecipe.objects.create(
+                ingredient=ingredient_obj,
+                amount=amount,
+                recipe=recipe
+            )
+
+    def update_ingredients(self, ingredients, recipe):
+        IngredientAmountInRecipe.objects.filter(recipe=recipe).delete()
+        self.create_ingredients(ingredients, recipe)
+
+    def create(self, validated_data):
+        tags = validated_data.pop('tags')
+        ingredients = validated_data.pop('ingredient_amount')
+
+        recipe = Recipe.objects.create(**validated_data)
+
+        self.create_tags(tags, recipe)
+        self.create_ingredients(ingredients, recipe)
+
+        return recipe
+
+    def update(self, instance, validated_data):
+        tags = validated_data.pop('tags', False)
+        ingredients = validated_data.pop('ingredient_amount', False)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+
+        if tags:
+            self.update_tags(tags, instance)
+        if ingredients:
+            self.update_ingredients(ingredients, instance)
+
+        return instance
 
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
