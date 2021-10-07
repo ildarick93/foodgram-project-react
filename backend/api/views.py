@@ -81,8 +81,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         queryset = ShoppingList.objects.filter(
             user_id=self.request.user).values(
             'recipe_id__ingredients__name',
-            'recipe_id__ingredients__measurement_unit').annotate(
-                Sum('recipe_id__ingredients_amount__amount'))
+            'recipe_id__ingredients__measurements_unit').annotate(
+                Sum('recipe_id__ingredientamountinrecipe__amount'))
         buffer = get_pdf_file(queryset)
         return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
 
@@ -100,8 +100,8 @@ def get_pdf_file(queryset):
     for qs in queryset:
         title = qs['recipe_id__ingredients__name']
         amount = qs['recipe_id__ingredients_amount__amount__sum']
-        measurement_unit = qs['recipe_id__ingredients__measurement_unit']
-        t.textLine(f'{title} ({measurement_unit}) - {amount}')
+        measurements_unit = qs['recipe_id__ingredients__measurements_unit']
+        t.textLine(f'{title} ({measurements_unit}) - {amount}')
     p.drawText(t)
     p.showPage()
     p.save()
