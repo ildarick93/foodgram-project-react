@@ -50,7 +50,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('text', 'author', 'ingredients', 'tags', 'image', 'name',
+        fields = ('text', 'author', 'ingredient', 'tags', 'image', 'name',
                   'id', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
 
     def _is_in_list(self, model, obj):
