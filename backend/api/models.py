@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db.models import (CASCADE, CharField, DateTimeField, ForeignKey,
                               ImageField, Model, PositiveIntegerField,
-                              SlugField, TextField)
+                              SlugField, TextField, UniqueConstraint)
 from django.db.models.fields.related import ManyToManyField
 
 User = get_user_model()
@@ -104,7 +104,12 @@ class IngredientAmountInRecipe(Model):
         ordering = ['recipe']
         verbose_name = 'Ingredient amount in recipe'
         verbose_name_plural = 'Ingredients amount in recipe'
-        unique_together = ['ingredient', 'recipe']
+        constraints = [
+            UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique_ingredient_in_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'Need {self.amount} of {self.ingredient} for {self.recipe}'
@@ -122,7 +127,12 @@ class RecipeTag(Model):
         ordering = ['recipe']
         verbose_name = 'Tag of recipe'
         verbose_name_plural = 'Tags of recipe'
-        unique_together = ['tag', 'recipe']
+        constraints = [
+            UniqueConstraint(
+                fields=['tag', 'recipe'],
+                name='unique_tag_in_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'Pair of {self.tag}, {self.recipe}'
@@ -145,6 +155,12 @@ class FavoriteRecipe(Model):
     class Meta:
         verbose_name = 'Favorite recipes'
         unique_together = ['user', 'recipe']
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_favorite_recipe_for_user'
+            )
+        ]
 
     def __str__(self):
         return f'{self.user} likes {self.recipe}'
@@ -166,7 +182,12 @@ class ShoppingList(Model):
 
     class Meta:
         verbose_name = 'Shopping list'
-        unique_together = ['user', 'recipe']
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique_shopping_list_for_user'
+            )
+        ]
 
     def __str__(self):
         return f'{self.recipe} is in shopping list of {self.user}'

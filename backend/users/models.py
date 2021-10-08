@@ -45,6 +45,12 @@ class Subscription(models.Model):
         verbose_name = 'Subscription'
         verbose_name_plural = 'Subscriptions'
         unique_together = ['subscriber', 'subscribed_to']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['subscriber', 'subscribed_to'],
+                name='unique_follower'
+            )
+        ]
 
     def __str__(self):
         return f'{self.subscriber} follows {self.subscribed_to}'
