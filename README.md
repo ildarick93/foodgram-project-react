@@ -38,7 +38,7 @@ scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
 ### 6. На сервере создайте файл .env (nano .env) и заполните переменные окружения или создайте этот файл локально и скопируйте файл по аналогии с предыдущим пунктом:
 ```python
-SECRET_KEY=<секретный ключ проекта django>
+SECRET_KEY=<секретный ключ проекта Django>
 
 DB_ENGINE=django.db.backends.postgresql
 DB_NAME=<имя базы данных postgres>
@@ -58,6 +58,22 @@ POSTGRES_USER=<имя пользователя> - необязательный �
 sudo docker-compose up -d --build
 ```
 ### 9. После успешной сборки на сервере выполните команды (только после первого деплоя):
+* Соберите статические файлы:
+```python
+sudo docker-compose exec backend python manage.py collectstatic --noinput
+```
+* Применитe миграции:
+```python
+sudo docker-compose exec backend python manage.py migrate --noinput
+```
+* Загрузите ингридиенты в базу данных (не обязательно
+```python
+sudo docker-compose exec backend python manage.py loaddata fixtures/ingredients.json
+```
+* Создать суперпользователя Django:
+```python
+sudo docker-compose exec backend python manage.py createsuperuser
+```
 
 ## Автор
 Саляхов Ильдар Флюрович
