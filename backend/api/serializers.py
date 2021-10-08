@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-
+from rest_framework.exceptions import ValidationError
 from users.serializers import CustomUserSerializer
 
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
@@ -56,12 +56,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     def _is_in_list(self, model, obj):
         if not self.context['request'].user.is_authenticated:
             return False
-        if model.objects.filter(
+        return model.objects.filter(
             recipe=obj,
             user=self.context['request'].user
-        ).exists():
-            return True
-        return False
+        ).exists()
 
     def get_is_favorited(self, obj):
         return self._is_in_list(FavoriteRecipe, obj)
@@ -118,6 +116,29 @@ class RecipeSerializer(serializers.ModelSerializer):
             self.update_ingredients(ingredients, instance)
 
         return instance
+
+    def if_id_repeated(self, value):
+        id_request_set = set(value)
+        if not len(id_request_set) == len(value):
+            raise ValidationError({'errors': 'Check for repeated values'})
+
+    def if_id_does_not_exist(self, value, model):
+        id_request_set = set(value)
+        queryset = model.objects.all().only('id')
+        id_from_base_set = {note.id for note in queryset}
+        if not id_request_set.issubset(id_from_base_set):
+            raise ValidationError({'errors': 'Some values do not exist'})
+
+    def validate_tags(self, value):
+        self.if_id_repeated(value)
+        self.if_id_does_not_exist(value, Tag)
+        return value
+
+    def validate_ingredients(self, value):
+        ids_list = [int(note['id']) for note in value]
+        self.if_id_repeated(ids_list)
+        self.if_id_does_not_exist(ids_list, Ingredient)
+        return value
 
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):

@@ -1,24 +1,18 @@
-import io
-
 from django.db.models import Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from users.serializers import RecipeLiteSerializer
 
 from .filters import CustomSearchFilter, RecipeFilter
 from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingList, Tag
 from .permissions import IsAdmin, IsOwner, ReadOnly
 from .serializers import IngredientSerializer, RecipeSerializer, TagSerializer
+from .utils import get_pdf_file
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -85,25 +79,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 Sum('recipe_id__ingredientamountinrecipe__amount'))
         buffer = get_pdf_file(queryset)
         return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-
-
-def get_pdf_file(queryset):
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-    p.setLineWidth(.3)
-    pdfmetrics.registerFont(TTFont('FreeSans', 'FreeSans.ttf'))
-    p.setFont('FreeSans', 14)
-    t = p.beginText(30, 750, direction=0)
-    t.textLine('Shopping list')
-    p.line(30, 747, 580, 747)
-    t.textLine(' ')
-    for qs in queryset:
-        title = qs['recipe_id__ingredients__name']
-        amount = qs['recipe_id__ingredients_amount__amount__sum']
-        measurements_unit = qs['recipe_id__ingredients__measurements_unit']
-        t.textLine(f'{title} ({measurements_unit}) - {amount}')
-    p.drawText(t)
-    p.showPage()
-    p.save()
-    buffer.seek(0)
-    return buffer

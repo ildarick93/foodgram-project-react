@@ -40,11 +40,7 @@ class CustomUserViewSet(UserViewSet):
                 'subscribed_to', flat=True):
             raise ValidationError('You already follow this author')
         else:
-            follow = Subscription.objects.create(
-                subscriber=user,
-                subscribed_to=author
-            )
-            follow.save()
+            Subscription.objects.create(subscriber=user, subscribed_to=author)
             serializer = SubscriptionsSerializer(author)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
