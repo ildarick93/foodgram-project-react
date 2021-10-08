@@ -135,9 +135,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         return value
 
     def validate_ingredients(self, value):
-        ids_list = [int(note['id']) for note in value]
-        self.if_id_repeated(ids_list)
-        self.if_id_does_not_exist(ids_list, Ingredient)
+        id_list = [int(note['id']) for note in value]
+        self.if_id_repeated(id_list)
+        self.if_id_does_not_exist(id_list, Ingredient)
         return value
 
 
