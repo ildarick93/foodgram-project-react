@@ -36,7 +36,17 @@ P.S. В ссылке вместо version необходимо вписать а
 scp docker-compose.yml <username>@<host>:/home/<username>/docker-compose.yml
 scp nginx.conf <username>@<host>:/home/<username>/nginx.conf
 ```
+### 6. На сервере создайте файл .env (nano .env) и заполните переменные окружения или создайте этот файл локально и скопируйте файл по аналогии с предыдущим пунктом:
+```python
+SECRET_KEY=<секретный ключ проекта django>
 
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=<имя базы данных postgres>
+DB_USER=<имя пользователя БД>
+DB_PASSWORD=<пароль>
+DB_HOST=db
+DB_PORT=5432
+```
 
 
 ## Автор
