@@ -17,3 +17,7 @@
 ## Подготовка к запуску проекта:
 1. Склонируйте репозиторий
 git clone https://github.com/ildarick93/foodgram-project-react
+
+## Автор
+Саляхов Ильдар Флюрович
+Telegram: @ildarick
