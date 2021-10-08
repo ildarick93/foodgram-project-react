@@ -6,7 +6,13 @@
 Каждому рецепту можно присвоить определеные тэги, добавлять рецепты в избранное и в список покупок. Список покупок можно скачать для удобства. 
 
 ## Технологии
-Python, Git, Docker, CI/CD, Django REST Framework, PostgreSQL, API
+* Python 
+* Git 
+* Docker 
+* CI/CD 
+* Django REST Framework 
+* PostgreSQL 
+* API
 
 ## Подготовка к запуску проекта:
 1. Склонируйте репозиторий
