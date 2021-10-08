@@ -4,14 +4,20 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    username = models.CharField(max_length=150, unique=True, blank=False)
-    password = models.CharField(max_length=30, blank=False)
-    email = models.EmailField(unique=True, blank=False)
-    first_name = models.CharField(max_length=150, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name='Username'
+    )
+    password = models.CharField(max_length=30)
+    email = models.EmailField(unique=True, verbose_name='Email')
+    first_name = models.CharField(max_length=150, verbose_name='First name')
+    last_name = models.CharField(max_length=150, verbose_name='Last name')
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     class Meta(AbstractUser.Meta):
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
         ordering = ['username']
 
     def __str__(self):
@@ -25,15 +31,19 @@ class Subscription(models.Model):
     subscriber = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='subscribed_to'
+        related_name='subscribed_to',
+        verbose_name='Follower'
     )
     subscribed_to = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='subscribers'
+        related_name='subscribers',
+        verbose_name='Following'
     )
 
     class Meta:
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
         unique_together = ['subscriber', 'subscribed_to']
 
     def __str__(self):
