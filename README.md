@@ -74,6 +74,24 @@ sudo docker-compose exec backend python manage.py loaddata fixtures/ingredients.
 ```python
 sudo docker-compose exec backend python manage.py createsuperuser
 ```
+### 10. Проект будет доступен по вашему IP
+### 11. Для работы с Workflow добавьте в Secrets GitHub переменные окружения для работы:
+```python
+DOCKER_PASSWORD=<пароль от DockerHub>
+DOCKER_USERNAME=<имя пользователя>
+
+USER=<username для подключения к серверу>
+HOST=<IP сервера>
+PASSPHRASE=<пароль для сервера, если он установлен>
+SSH_KEY=<ваш SSH ключ (для получения команда: cat ~/.ssh/id_rsa)>
+
+TG_CHAT_ID=<ID чата, в который придет сообщение>
+TELEGRAM_TOKEN=<токен вашего бота>
+```
+### 12. Workflow состоит из трёх шагов:
+* Сборка и публикация образа бекенда на DockerHub.
+* Автоматический деплой на удаленный сервер.
+* Отправка уведомления в телеграм-чат.
 
 ## Автор
 Саляхов Ильдар Флюрович
