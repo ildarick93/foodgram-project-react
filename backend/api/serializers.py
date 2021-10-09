@@ -66,7 +66,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
-        if ingredients == []:
+        if not ingredients:
             raise ValidationError('You have to select at least 1 ingredient')
         for ingredient in ingredients:
             if int(ingredient['amount']) <= 0:
