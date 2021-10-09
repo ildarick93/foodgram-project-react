@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from users.serializers import CustomUserSerializer
 
+from users.serializers import CustomUserSerializer
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
                      Recipe, RecipeTag, ShoppingList, Tag)
 
@@ -52,6 +52,26 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('text', 'author', 'ingredient', 'tags', 'image', 'name',
                   'id', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
+
+    def validate_cooking_time(self, data):
+        if data <= 0:
+            raise ValidationError('Cooking time must be > 0')
+        return data
+
+    def validate_tags(self, data):
+        tags = self.initial_data.get('tags')
+        if len(tags) == 0:
+            raise serializers.ValidationError('Add at least 1 tag')
+        return data
+
+    def validate_ingredients(self, data):
+        ingredients = self.initial_data.get('ingredients')
+        if ingredients == []:
+            raise ValidationError('You have to select at least 1 ingredient')
+        for ingredient in ingredients:
+            if int(ingredient['amount']) <= 0:
+                raise ValidationError('Ingredient amount must be > 0')
+        return data
 
     def _is_in_list(self, model, obj):
         if not self.context['request'].user.is_authenticated:
@@ -116,29 +136,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             self.update_ingredients(ingredients, instance)
 
         return instance
-
-    def if_id_repeated(self, value):
-        id_request_set = set(value)
-        if not len(id_request_set) == len(value):
-            raise ValidationError({'errors': 'Check for repeated values'})
-
-    def if_id_does_not_exist(self, value, model):
-        id_request_set = set(value)
-        queryset = model.objects.all().only('id')
-        id_from_base_set = {note.id for note in queryset}
-        if not id_request_set.issubset(id_from_base_set):
-            raise ValidationError({'errors': 'Some values do not exist'})
-
-    def validate_tags(self, value):
-        self.if_id_repeated(value)
-        self.if_id_does_not_exist(value, Tag)
-        return value
-
-    def validate_ingredients(self, value):
-        id_list = [int(note['id']) for note in value]
-        self.if_id_repeated(id_list)
-        self.if_id_does_not_exist(id_list, Ingredient)
-        return value
 
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
