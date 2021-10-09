@@ -19,6 +19,9 @@ services:
       - db
   
   backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     image: ildarick93/foodgram_backend:latest
     restart: always
     depends_on:
