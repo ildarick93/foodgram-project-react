@@ -1,20 +1,17 @@
-version: '3.8'
+version: '3.3'
 services:
+
   db:
     image: postgres:12.4
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: foodgram
     restart: always
     env_file:
       - ./.env
 
   frontend:
     build:
-      context: ildarick93/foodgram-frontend:latest
+      context: ../frontend
       dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
@@ -22,7 +19,7 @@ services:
       - db
   
   backend:
-    image: ildarick93/foodgram-backend:latest
+    image: ildarick93/foodgram_backend:latest
     restart: always
     depends_on:
       - db
@@ -30,7 +27,7 @@ services:
       - static_value:/backend/static/
       - media_value:/backend/media/
     env_file:
-      - ../.env
+      - ../backend/.env
   
   nginx:
     image: nginx:1.19.3
