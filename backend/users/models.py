@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
         unique=True,
         verbose_name='Username'
     )
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=150)
     email = models.EmailField(unique=True, verbose_name='Email')
     first_name = models.CharField(max_length=150, verbose_name='First name')
     last_name = models.CharField(max_length=150, verbose_name='Last name')
