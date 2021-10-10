@@ -66,7 +66,7 @@ sudo docker-compose exec backend python manage.py collectstatic --noinput
 ```python
 sudo docker-compose exec backend python manage.py migrate --noinput
 ```
-* Загрузите ингридиенты в базу данных (не обязательно
+* Загрузите ингридиенты в базу данных (не обязательно)
 ```python
 sudo docker-compose exec backend python manage.py loaddata fixtures/ingredients.json
 ```
