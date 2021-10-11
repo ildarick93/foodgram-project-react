@@ -6,12 +6,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      DB_NAME: postgres
-    # env_file:
-    #   - ./.env
+    env_file:
+      - ../backend/.env
 
   frontend:
     image: saliakhovif/foodgram_frontend:latest
