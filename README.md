@@ -1,3 +1,6 @@
+## Бэйдж
+![foodgram-app workflow](https://github.com/ildarick93/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
+
 # Foodgram
 
 ## Описание
