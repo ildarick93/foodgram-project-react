@@ -23,8 +23,10 @@ services:
     volumes:
       - static_value:/backend/static/
       - media_value:/backend/media/
-    env_file:
-      - ./.env
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
   
   nginx:
     image: nginx:1.19.3
