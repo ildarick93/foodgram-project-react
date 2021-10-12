@@ -7,8 +7,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     restart: always
     environment:
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       DB_NAME: postgres
 
   frontend:
@@ -23,8 +23,8 @@ services:
     depends_on:
       - db
     volumes:
-      - static_value:/backend/static/
-      - media_value:/backend/media/
+      - static_value:./static/
+      - media_value:./media/
     env_file:
       - ./.env
   
