@@ -1,0 +1,110 @@
+[
+    {
+    "model": "api.IngredientAmountInRecipe",
+    "pk": 1,
+    "fields": {
+      "ingredient": 1,
+      "recipe": 1,
+      "amount": 10
+    }
+    },
+    {
+    "model": "api.IngredientAmountInRecipe",
+    "pk": 2,
+    "fields": {
+      "ingredient": 2,
+      "recipe": 1,
+      "amount": 5
+    }
+    },
+    {
+    "model": "api.IngredientAmountInRecipe",
+    "pk": 3,
+    "fields": {
+      "ingredient": 147,
+      "recipe": 2,
+      "amount": 12
+    }
+    },
+    {
+    "model": "api.IngredientAmountInRecipe",
+    "pk": 4,
+    "fields": {
+      "ingredient": 3,
+      "recipe": 2,
+      "amount": 3
+    }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 5,
+      "fields": {
+        "ingredient": 45,
+        "recipe": 2,
+        "amount": 95
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 6,
+      "fields": {
+        "ingredient": 923,
+        "recipe": 3,
+        "amount": 500
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 7,
+      "fields": {
+        "ingredient": 920,
+        "recipe": 3,
+        "amount": 300
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 8,
+      "fields": {
+        "ingredient": 3,
+        "recipe": 4,
+        "amount": 3
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 9,
+      "fields": {
+        "ingredient": 21,
+        "recipe": 4,
+        "amount": 3
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 10,
+      "fields": {
+        "ingredient": 3,
+        "recipe": 5,
+        "amount": 3
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 11,
+      "fields": {
+        "ingredient": 21,
+        "recipe": 5,
+        "amount": 3
+      }
+    },
+    {
+      "model": "api.IngredientAmountInRecipe",
+      "pk": 12,
+      "fields": {
+        "ingredient": 178,
+        "recipe": 5,
+        "amount": 429
+      }
+    }
+]

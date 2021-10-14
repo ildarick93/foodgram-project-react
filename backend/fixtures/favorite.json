@@ -1,0 +1,10 @@
+[
+    {
+    "model": "api.Favorite",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "recipe": 1
+    }
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+    "model": "users.Subscription",
+    "pk": 1,
+    "fields": {
+      "subscriber": 1,
+      "subscribed_to": 3
+    }
+    },
+    {
+      "model": "users.Subscription",
+      "pk": 2,
+      "fields": {
+        "subscriber": 1,
+        "subscribed_to": 5
+      }
+      }
+]

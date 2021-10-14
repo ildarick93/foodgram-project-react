@@ -1,0 +1,72 @@
+[
+    {
+    "pk": 1,
+    "model": "api.Recipe",
+    "fields": {
+      "author": 1,
+      "tags": [1, 2],
+      "ingredients": [1, 2, 3],
+      "name": "Lasagna",
+      "image": "/images/lasagna.jpg",
+      "text": "add",
+      "cooking_time": 10,
+      "pub_date": "2021-09-25 13:34:16.332479+03:00"
+    }
+    },
+    {
+      "pk": 2,
+      "model": "api.Recipe",
+      "fields": {
+        "author": 2,
+        "tags": [3],
+        "ingredients": [4],
+        "name": "Cake",
+        "image": "/images/lasagna.jpg",
+        "text": "add",
+        "cooking_time": 5,
+        "pub_date": "2021-09-20 13:34:16.332479+03:00"
+      }
+      },
+      {
+        "pk": 3,
+        "model": "api.Recipe",
+        "fields": {
+          "author": 3,
+          "tags": [1],
+          "ingredients": [153, 67],
+          "name": "Omelette",
+          "image": "/images/lasagna.jpg",
+          "text": "add",
+          "cooking_time": 17,
+          "pub_date": "2021-09-20 13:34:16.332479+03:00"
+        }
+        },    
+        {
+          "pk": 4,
+          "model": "api.Recipe",
+          "fields": {
+            "author": 3,
+            "tags": [2],
+            "ingredients": [128,256],
+            "name": "Pizza",
+            "image": "/images/lasagna.jpg",
+            "text": "add",
+            "cooking_time": 10,
+            "pub_date": "2021-09-20 13:34:16.332479+03:00"
+          }
+          },        
+          {
+            "pk": 5,
+            "model": "api.Recipe",
+            "fields": {
+              "author": 5,
+              "tags": [2],
+              "ingredients": [128,256],
+              "name": "Soup",
+              "image": "/images/lasagna.jpg",
+              "text": "add",
+              "cooking_time": 10,
+              "pub_date": "2021-09-20 13:34:16.332479+03:00"
+            }
+            }
+]
