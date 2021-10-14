@@ -25,7 +25,6 @@ class Tag(Model):
 class Ingredient(Model):
     name = CharField(
         max_length=100,
-        unique=True,
         db_index=True,
         verbose_name='Name of ingredient'
     )
@@ -153,7 +152,7 @@ class FavoriteRecipe(Model):
     )
 
     class Meta:
-        verbose_name = 'Favorite recipes'
+        verbose_name = 'Favorite recipe'
         unique_together = ['user', 'recipe']
         constraints = [
             UniqueConstraint(
