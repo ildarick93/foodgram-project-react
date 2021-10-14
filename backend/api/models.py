@@ -51,13 +51,13 @@ class Recipe(Model):
     )
     ingredients = ManyToManyField(
         Ingredient,
-        through='IngredientAmountInRecipe',
+        # through='IngredientAmountInRecipe',
         related_name='recipes',
         verbose_name='Ingredients'
     )
     tags = ManyToManyField(
         Tag,
-        through='RecipeTag',
+        # through='RecipeTag',
         related_name='recipes',
         verbose_name='Tag of recipe'
     )
