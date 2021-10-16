@@ -37,7 +37,7 @@ class Subscription(models.Model):
     subscribed_to = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='subscriber',
+        related_name='subscribers',
         verbose_name='Following'
     )
 
