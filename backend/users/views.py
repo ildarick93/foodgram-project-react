@@ -19,7 +19,6 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     # serializer_class = CustomUserSerializer
-
     # @action(detail=False, methods=('GET',))
     # def subscriptions(self, request):
     #     user = self.request.user
