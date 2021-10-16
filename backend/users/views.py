@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Subscription
@@ -16,19 +17,33 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     serializer_class = CustomUserSerializer
 
-    @action(detail=False, methods=('GET',))
-    def subscriptions(self, request):
-        user = self.request.user
-        subscribed_to = user.subscribed_to.all().values_list(
-            'subscribed_to_id', flat=True)
-        queryset = User.objects.filter(id__in=subscribed_to).annotate(
-            count=Count('recipes__id'))
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = SubscriptionsSerializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = SubscriptionsSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # @action(detail=False, methods=('GET',))
+    # def subscriptions(self, request):
+    #     user = self.request.user
+    #     subscribed_to = user.subscribed_to.all().values_list(
+    #         'subscribed_to_id', flat=True)
+    #     queryset = User.objects.filter(id__in=subscribed_to).annotate(
+    #         count=Count('recipes__id'))
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = SubscriptionsSerializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     serializer = SubscriptionsSerializer(queryset, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(
+        methods=('GET',),
+        detail=False,
+        serializer_class=SubscriptionsSerializer,
+        permission_classes=[IsAuthenticated]
+    )
+    def subscriptions(self, request, *args, **kwargs):
+        subscriber_subscriptions = User.objects.filter(
+            subscribers__user=self.request.user
+        )
+        page = self.paginate_queryset(subscriber_subscriptions)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=('GET',))
     def subscribe(self, request, id=None):
