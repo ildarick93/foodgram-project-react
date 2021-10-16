@@ -95,7 +95,7 @@ class IngredientAmountInRecipe(Model):
         verbose_name='Name of recipe'
     )
     amount = PositiveIntegerField(
-        # validators=[MinValueValidator(1, 'Ingredient amount must be > 0')],
+        ## validators=[MinValueValidator(1, 'Ingredient amount must be > 0')],
         verbose_name='Amount of ingredient',
     )
 
