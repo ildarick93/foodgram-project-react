@@ -18,20 +18,6 @@ User = get_user_model()
 
 class CustomUserViewSet(UserViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
-    # serializer_class = CustomUserSerializer
-    # @action(detail=False, methods=('GET',))
-    # def subscriptions(self, request):
-    #     user = self.request.user
-    #     subscribed_to = user.subscribed_to.all().values_list(
-    #         'subscribed_to_id', flat=True)
-    #     queryset = User.objects.filter(id__in=subscribed_to).annotate(
-    #         count=Count('recipes__id'))
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = SubscriptionsSerializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #     serializer = SubscriptionsSerializer(queryset, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(
         methods=('GET'),
@@ -40,10 +26,10 @@ class CustomUserViewSet(UserViewSet):
         permission_classes=[IsAuthenticated]
     )
     def subscriptions(self, request, *args, **kwargs):
-        subscriber_subscriptions = User.objects.filter(
-            subscribers__subscriber=self.request.user
+        subscriptions = User.objects.filter(
+            following__subscriber=self.request.user
         )
-        page = self.paginate_queryset(subscriber_subscriptions)
+        page = self.paginate_queryset(subscriptions)
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -87,6 +73,20 @@ class CustomUserViewSet(UserViewSet):
             subscribed_to__id=self.kwargs['id']
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # @action(detail=False, methods=('GET',))
+    # def subscriptions(self, request):
+    #     user = self.request.user
+    #     subscribed_to = user.subscribed_to.all().values_list(
+    #         'subscribed_to_id', flat=True)
+    #     queryset = User.objects.filter(id__in=subscribed_to).annotate(
+    #         count=Count('recipes__id'))
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = SubscriptionsSerializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     serializer = SubscriptionsSerializer(queryset, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     # @action(detail=True, methods=('GET',))
     # def subscribe(self, request, id=None):
