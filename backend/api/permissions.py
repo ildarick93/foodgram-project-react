@@ -13,13 +13,13 @@ class IsAdmin(BasePermission):
         return (request.user
                 and request.user.is_authenticated
                 and request.user.is_active
-                and request.user.is_admin)
+                and request.user.is_staff)
 
     def has_object_permission(self, request, view, obj):
         return (request.user
                 and request.user.is_authenticated
                 and request.user.is_active
-                and request.user.is_admin)
+                and request.user.is_staff)
 
 
 class ReadOnly(BasePermission):
