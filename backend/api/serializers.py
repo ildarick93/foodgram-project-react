@@ -21,26 +21,26 @@ class TagSerializer(serializers.ModelSerializer):
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ('id', 'name', 'measurements_unit')
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.CharField(source='ingredient.id', read_only=True)
-    name = serializers.CharField(source='ingredient.name', read_only=True)
-    measurements_unit = serializers.CharField(
-        source='ingredient.measurements_unit',
+    id = serializers.CharField(source='Ingredient.id', read_only=True)
+    name = serializers.CharField(source='Ingredient.name', read_only=True)
+    measurement_unit = serializers.CharField(
+        source='Ingredient.measurement_unit',
         read_only=True
     )
 
     class Meta:
         model = IngredientAmountInRecipe
-        fields = ('id', 'name', 'measurements_unit', 'amount')
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     image = Base64ImageField()
-    ingredient = IngredientAmountInRecipeSerializer(
+    ingredients = IngredientAmountInRecipeSerializer(
         source='ingredientamountinrecipe_set',
         many=True
     )
@@ -50,7 +50,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('text', 'author', 'ingredient', 'tags', 'image', 'name',
+        fields = ('text', 'author', 'ingredients', 'tags', 'image', 'name',
                   'id', 'cooking_time', 'is_favorited', 'is_in_shopping_cart')
 
     def validate_cooking_time(self, data):
@@ -121,7 +121,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags', False)
-        ingredients = validated_data.pop('ingredient_amount', False)
+        ingredients = validated_data.pop('ingredients', False)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)

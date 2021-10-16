@@ -28,7 +28,7 @@ class Ingredient(Model):
         db_index=True,
         verbose_name='Name of ingredient'
     )
-    measurements_unit = CharField(
+    measurement_unit = CharField(
         max_length=200,
         verbose_name='Unit of measurement'
     )
@@ -39,7 +39,7 @@ class Ingredient(Model):
         verbose_name_plural = 'Ingredients'
 
     def __str__(self):
-        return f'{self.name} ({self.measurements_unit})'
+        return f'{self.name} ({self.measurement_unit})'
 
 
 class Recipe(Model):
