@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 # from django.db.models import Count
 from djoser.views import UserViewSet
+from rest_framework import status
 from rest_framework.authentication import (SessionAuthentication,
                                            TokenAuthentication)
-from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
