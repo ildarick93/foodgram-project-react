@@ -10,7 +10,7 @@ from users.serializers import RecipeLiteSerializer
 
 from .filters import CustomSearchFilter, RecipeFilter
 from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingList, Tag
-from .permissions import IsAdmin, IsOwner, ReadOnly
+from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
 from .serializers import IngredientSerializer, RecipeSerializer, TagSerializer
 from .utils import get_pdf_file
 
@@ -33,7 +33,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
     serializer_class = RecipeSerializer  # full
-    permission_classes = [IsOwner | IsAdmin | IsAuthenticated | ReadOnly]
+    permission_classes = [OwnerOrAdminOrAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
