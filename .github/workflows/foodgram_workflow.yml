@@ -73,7 +73,6 @@ jobs:
             sudo docker-compose exec -T backend python manage.py migrate
             sudo docker-compose exec -T backend python manage.py loaddata fixtures/ingredients.json
             sudo docker-compose exec -T backend python manage.py loaddata fixtures/tags.json
-            sudo docker-compose exec -T backend python manage.py loaddata fixtures/users.json
   send_message:
       runs-on: ubuntu-latest
       needs: deploy

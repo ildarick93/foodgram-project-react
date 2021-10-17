@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from djoser.views import UserViewSet
 from rest_framework import status
-from rest_framework.authentication import (SessionAuthentication,
-                                           TokenAuthentication)
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
@@ -15,7 +14,7 @@ User = get_user_model()
 
 
 class CustomUserViewSet(UserViewSet):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication]
 
     @action(
         methods=('GET'),
