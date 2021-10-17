@@ -71,15 +71,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def delete_shopping_cart(self, request, *args, **kwargs):
         return self._delete_link(request, ShoppingList)
 
-    # @action(detail=False, methods=['get'])
-    # def download_shopping_cart(self, request):
-    #     queryset = ShoppingList.objects.filter(
-    #         user_id=self.request.user).values(
-    #         'recipe_id__ingredients__name',
-    #         'recipe_id__ingredients__measurement_unit').annotate(
-    #             Sum('recipe_id__ingredientamountinrecipe__amount'))
-    #     buffer = get_pdf_file(queryset)
-    #     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
     @action(
         methods=['get'],
         detail=False,
