@@ -24,23 +24,18 @@ class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
-        fields = (
-            'id',
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'is_subscribed'
-        )
+        fields = ('email', 'id', 'username', 'first_name',
+                  'last_name', 'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request is None or request.user.is_anonymous:
+        if not self.context['request'].user.is_authenticated:
             return False
-        return Subscription.objects.filter(
-            subscriber=request.user,
-            subscribed_to=obj
-        ).exists()
+        if Subscription.objects.filter(
+            subscriber=self.context['request'].user,
+            subscribed_to__id=obj.id,
+        ).exists():
+            return True
+        return False
 
 
 class RecipeLiteSerializer(serializers.ModelSerializer):
