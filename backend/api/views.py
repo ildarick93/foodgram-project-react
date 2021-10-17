@@ -1,5 +1,5 @@
-from django.db.models import Sum
-from django.http import FileResponse
+# from django.db.models import Sum
+# from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -9,10 +9,11 @@ from rest_framework.response import Response
 from users.serializers import RecipeLiteSerializer
 
 from .filters import CustomSearchFilter, RecipeFilter
-from .models import FavoriteRecipe, Ingredient, Recipe, ShoppingList, Tag
+from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
+                     Recipe, ShoppingList, Tag)
 from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
 from .serializers import IngredientSerializer, RecipeSerializer, TagSerializer
-from .utils import get_pdf_file
+from .utils import add_file_to_response, form_shop_list  # get_pdf_file
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -70,12 +71,23 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def delete_shopping_cart(self, request, *args, **kwargs):
         return self._delete_link(request, ShoppingList)
 
-    @action(detail=False, methods=['get'])
-    def download_shopping_cart(self, request):
-        queryset = ShoppingList.objects.filter(
-            user_id=self.request.user).values(
-            'recipe_id__ingredients__name',
-            'recipe_id__ingredients__measurement_unit').annotate(
-                Sum('recipe_id__ingredientamountinrecipe__amount'))
-        buffer = get_pdf_file(queryset)
-        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+    # @action(detail=False, methods=['get'])
+    # def download_shopping_cart(self, request):
+    #     queryset = ShoppingList.objects.filter(
+    #         user_id=self.request.user).values(
+    #         'recipe_id__ingredients__name',
+    #         'recipe_id__ingredients__measurement_unit').annotate(
+    #             Sum('recipe_id__ingredientamountinrecipe__amount'))
+    #     buffer = get_pdf_file(queryset)
+    #     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+    @action(
+        methods=['get'],
+        detail=False,
+        permission_classes=[IsAuthenticated]
+    )
+    def download_shopping_cart(self, request, *args, **kwargs):
+        results = IngredientAmountInRecipe.objects.filter(
+            recipe__is_in_shopping_list__user=request.user
+        ).select_related('recipe').select_related('ingredient')
+        data = form_shop_list(results)
+        return add_file_to_response(data, 'text/plain')

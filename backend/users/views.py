@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-# from django.db.models import Count
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.authentication import (SessionAuthentication,
@@ -70,53 +69,3 @@ class CustomUserViewSet(UserViewSet):
             subscribed_to__id=self.kwargs['id']
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    # @action(detail=False, methods=('GET',))
-    # def subscriptions(self, request):
-    #     user = self.request.user
-    #     subscribed_to = user.subscribed_to.all().values_list(
-    #         'subscribed_to_id', flat=True)
-    #     queryset = User.objects.filter(id__in=subscribed_to).annotate(
-    #         count=Count('recipes__id'))
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = SubscriptionsSerializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #     serializer = SubscriptionsSerializer(queryset, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
-
-    # @action(detail=True, methods=('GET',))
-    # def subscribe(self, request, id=None):
-    #     user = request.user
-    #     author = get_object_or_404(User, id=id)
-    #     if user.id == id:
-    #         raise ValidationError('You can not subscribe to yourself')
-    #     if int(id) in user.subscribed_to.all().values_list(
-    #             'subscribed_to', flat=True):
-    #         raise ValidationError('You already follow this author')
-    #     else:
-    #         Subscription.objects.create(subscriber=user,subscribed_to=author)
-    #         serializer = SubscriptionsSerializer(author)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    # @subscribe.mapping.delete
-    # def delete_subscribe(self, request, id=None):
-    #     user = request.user
-    #     author = get_object_or_404(User, id=id)
-    #     follow = get_object_or_404(
-    #         Subscription,
-    #         subscriber=user,
-    #         subscribed_to=author)
-    #     follow.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
-
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     if self.action == 'subscriptions':
-    #         user = self.request.user
-    #         subscribed_to = user.subscribed_to.all().values_list(
-    #             'subscribed_to_id', flat=True)
-    #         queryset = User.objects.filter(id__in=subscribed_to).annotate(
-    #             count=Count('recipes__id'))
-    #         return queryset
-    #     return queryset
