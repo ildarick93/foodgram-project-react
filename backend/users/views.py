@@ -7,7 +7,6 @@ from rest_framework.authentication import (SessionAuthentication,
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Subscription
@@ -23,7 +22,6 @@ class CustomUserViewSet(UserViewSet):
         methods=('GET'),
         detail=False,
         serializer_class=SubscriptionsSerializer,
-        permission_classes=[IsAuthenticated]
     )
     def subscriptions(self, request, *args, **kwargs):
         subscriptions = User.objects.filter(
@@ -36,7 +34,6 @@ class CustomUserViewSet(UserViewSet):
     @action(
         detail=True,
         methods=('GET'),
-        permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, *args, **kwargs):
         subscribed_to = get_object_or_404(User, id=self.kwargs['id'])
