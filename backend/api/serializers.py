@@ -15,7 +15,6 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug')
-        read_only_fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -112,27 +111,22 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         tags = validated_data.pop('tags')
-        ingredients = validated_data.pop('ingredients')
+        ingredients = validated_data.pop('ingredientamountinrecipe_set')
         recipe = Recipe.objects.create(**validated_data)
         self.create_tags(tags, recipe)
         self.create_ingredients(ingredients, recipe)
-
         return recipe
 
     def update(self, instance, validated_data):
         tags = validated_data.pop('tags', False)
         ingredients = validated_data.pop('ingredients', False)
-
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-
         instance.save()
-
         if tags:
             self.update_tags(tags, instance)
         if ingredients:
             self.update_ingredients(ingredients, instance)
-
         return instance
 
 
