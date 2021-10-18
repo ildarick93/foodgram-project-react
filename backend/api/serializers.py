@@ -14,7 +14,8 @@ User = get_user_model()
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'color', 'slug')
+        fields = 'id'
+        # fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -89,7 +90,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     def create_tags(self, tags, recipe):
         for tag_id in tags:
             tag = get_object_or_404(Tag, id=tag_id)
-            RecipeTag.objects.create(tag=tag, recipe=recipe)
+            RecipeTag.objects.create(recipe=recipe, tag=tag)
 
     def update_tags(self, tags, recipe):
         RecipeTag.objects.filter(recipe=recipe).delete()
@@ -113,8 +114,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredientamountinrecipe_set')
         recipe = Recipe.objects.create(**validated_data)
-        recipe.tags.set(tags)
-        # self.create_tags(tags, recipe)
+        # recipe.tags.set(tags)
+        self.create_tags(tags, recipe)
         self.create_ingredients(ingredients, recipe)
         return recipe
 
