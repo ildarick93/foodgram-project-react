@@ -1,6 +1,12 @@
 ## Бэйдж
 ![foodgram-app workflow](https://github.com/ildarick93/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
+Review:
+IP - http://178.154.199.215/
+Username - soer (login for admin area)
+Password - 1A2b3c4d+
+Email - soer@lost.ru (login for site)
+
 # Foodgram
 
 ## Описание
