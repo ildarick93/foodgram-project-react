@@ -17,7 +17,7 @@ class CustomUserViewSet(UserViewSet):
     authentication_classes = [TokenAuthentication]
 
     @action(
-        methods=('GET'),
+        methods=('GET',),
         detail=False,
         serializer_class=SubscriptionsSerializer,
     )
