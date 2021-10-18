@@ -31,7 +31,7 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         detail=True,
-        methods=('GET'),
+        methods=('GET',),
     )
     def subscribe(self, request, *args, **kwargs):
         subscribed_to = get_object_or_404(User, id=self.kwargs['id'])
