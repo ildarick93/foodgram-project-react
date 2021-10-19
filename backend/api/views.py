@@ -32,7 +32,7 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
-    serializer_class = RecipeSerializer  # full
+    # serializer_class = RecipeSerializer  # full
     permission_classes = [OwnerOrAdminOrAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
