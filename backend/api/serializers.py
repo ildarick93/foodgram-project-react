@@ -46,6 +46,7 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     name = serializers.CharField(required=False)
     text = serializers.CharField(required=False)
+    author = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = Recipe
