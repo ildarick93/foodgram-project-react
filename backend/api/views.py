@@ -1,5 +1,3 @@
-# from django.db.models import Sum
-# from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -12,8 +10,9 @@ from .filters import CustomSearchFilter, RecipeFilter
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
                      Recipe, ShoppingList, Tag)
 from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
-from .serializers import IngredientSerializer, RecipeSerializer, TagSerializer
-from .utils import add_file_to_response, form_shop_list  # get_pdf_file
+from .serializers import (CreateUpdateRecipeSerializer, IngredientSerializer,
+                          RecipeSerializer, TagSerializer)
+from .utils import add_file_to_response, form_shop_list
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -82,3 +81,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).select_related('recipe').select_related('ingredient')
         data = form_shop_list(results)
         return add_file_to_response(data, 'text/plain')
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'partial_update']:
+            return CreateUpdateRecipeSerializer
+        return RecipeSerializer
