@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -74,7 +74,6 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
 
     def create_tags(self, tags, recipe):
         for tag in tags:
-            # tag = get_object_or_404(Tag, id=tag_id)
             RecipeTag.objects.create(recipe=recipe, tag=tag)
 
     def update_tags(self, tags, recipe):
@@ -84,9 +83,9 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
             ingredient_id, amount = ingredient['id'], ingredient['amount']
-            ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
+            # ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
             IngredientAmountInRecipe.objects.create(
-                ingredient=ingredient_obj,
+                ingredient=ingredient_id,
                 amount=amount,
                 recipe=recipe
             )
