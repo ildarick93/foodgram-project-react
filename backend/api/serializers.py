@@ -37,8 +37,8 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
 
 
 class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
-    # tags = serializers.PrimaryKeyRelatedField(many=True,
-    #                                           queryset=Tag.objects.all())
+    tags = serializers.PrimaryKeyRelatedField(many=True,
+                                              queryset=Tag.objects.all())
     ingredients = IngredientAmountInRecipeSerializer(
         source='ingredientamountinrecipe_set',
         many=True
@@ -52,10 +52,10 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('__all__')
 
-    def validate_cooking_time(self, data):
-        if data <= 0:
-            raise ValidationError('Cooking time must be > 0')
-        return data
+    # def validate_cooking_time(self, data):
+    #     if data <= 0:
+    #         raise ValidationError('Cooking time must be > 0')
+    #     return data
 
     # def validate_tags(self, data):
     #     tags = self.initial_data.get('tags')
@@ -63,14 +63,14 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     #         raise serializers.ValidationError('Add at least 1 tag')
     #     return data
 
-    def validate_ingredients(self, data):
-        ingredients = self.initial_data.get('ingredients')
-        if not ingredients:
-            raise ValidationError('You have to select at least 1 ingredient')
-        for ingredient in ingredients:
-            if int(ingredient['amount']) <= 0:
-                raise ValidationError('Ingredient amount must be > 0')
-        return data
+    # def validate_ingredients(self, data):
+    #     ingredients = self.initial_data.get('ingredients')
+    #     if not ingredients:
+    #         raise ValidationError('You have to select at least 1 ingredient')
+    #     for ingredient in ingredients:
+    #         if int(ingredient['amount']) <= 0:
+    #             raise ValidationError('Ingredient amount must be > 0')
+    #     return data
 
     def create_tags(self, tags, recipe):
         for tag_id in tags:
