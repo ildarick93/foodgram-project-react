@@ -53,18 +53,15 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     #     many=True
     # )
     image = Base64ImageField()
-    # name = serializers.CharField(required=False)
-    # text = serializers.CharField(required=False)
+    name = serializers.CharField(required=False)
+    text = serializers.CharField(required=False)
     author = CustomUserSerializer(read_only=True)
     cooking_time = serializers.IntegerField()
     ingredients = AddIngredientToRecipeSerializer(many=True)
 
     class Meta:
         model = Recipe
-        fields = (
-            'id', 'author', 'name', 'text', 'image',
-            'ingredients', 'tags', 'cooking_time',
-        )
+        fields = ('__all__')
 
     def validate_cooking_time(self, data):
         if data <= 0:
