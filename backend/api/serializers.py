@@ -37,8 +37,8 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
 
 
 class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
-    tags = serializers.PrimaryKeyRelatedField(many=True,
-                                              queryset=Tag.objects.all())
+    # tags = serializers.PrimaryKeyRelatedField(many=True,
+    #                                           queryset=Tag.objects.all())
     ingredients = IngredientAmountInRecipeSerializer(
         source='ingredientamountinrecipe_set',
         many=True
