@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -36,21 +36,35 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
+class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+    amount = serializers.IntegerField()
+
+    class Meta:
+        model = IngredientAmountInRecipe
+        fields = ('id', 'amount')
+
+
 class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
-    ingredients = IngredientAmountInRecipeSerializer(
-        source='ingredientamountinrecipe_set',
-        many=True
-    )
+    # ingredients = IngredientAmountInRecipeSerializer(
+    #     source='ingredientamountinrecipe_set',
+    #     many=True
+    # )
     image = Base64ImageField()
-    name = serializers.CharField(required=False)
-    text = serializers.CharField(required=False)
+    # name = serializers.CharField(required=False)
+    # text = serializers.CharField(required=False)
     author = CustomUserSerializer(read_only=True)
+    cooking_time = serializers.IntegerField()
+    ingredients = AddIngredientToRecipeSerializer(many=True)
 
     class Meta:
         model = Recipe
-        fields = ('__all__')
+        fields = (
+            'id', 'author', 'name', 'text', 'image',
+            'ingredients', 'tags', 'cooking_time',
+        )
 
     def validate_cooking_time(self, data):
         if data <= 0:
@@ -80,14 +94,23 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
         RecipeTag.objects.filter(recipe=recipe).delete()
         self.create_tags(tags, recipe)
 
+    # def create_ingredients(self, ingredients, recipe):
+    #     for ingredient in ingredients:
+    #         ingredient_id, amount = ingredient['id'], ingredient['amount']
+    #         ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
+    #         IngredientAmountInRecipe.objects.create(
+    #             ingredient=ingredient_obj,
+    #             amount=amount,
+    #             recipe=recipe
+    #         )
+
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            ingredient_id, amount = ingredient['id'], ingredient['amount']
-            ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
+            ingredient_id = ingredient['id']
             IngredientAmountInRecipe.objects.create(
-                ingredient=ingredient_obj,
-                amount=amount,
-                recipe=recipe
+                recipe=recipe,
+                ingredient=ingredient_id,
+                amount=ingredient.get('amount'),
             )
 
     def update_ingredients(self, ingredients, recipe):
