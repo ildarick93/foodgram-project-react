@@ -57,11 +57,11 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
             raise ValidationError('Cooking time must be > 0')
         return data
 
-    def validate_tags(self, data):
-        tags = self.initial_data.get('tags')
-        if len(tags) == 0:
-            raise serializers.ValidationError('Add at least 1 tag')
-        return data
+    # def validate_tags(self, data):
+    #     tags = self.initial_data.get('tags')
+    #     if len(tags) == 0:
+    #         raise serializers.ValidationError('Add at least 1 tag')
+    #     return data
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
