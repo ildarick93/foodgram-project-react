@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-# from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
 from users.serializers import CustomUserSerializer
 
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
@@ -52,29 +52,29 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = ('__all__')
 
-    # def validate_cooking_time(self, data):
-    #     if data <= 0:
-    #         raise ValidationError('Cooking time must be > 0')
-    #     return data
+    def validate_cooking_time(self, data):
+        if data <= 0:
+            raise ValidationError('Cooking time must be > 0')
+        return data
 
-    # def validate_tags(self, data):
-    #     tags = self.initial_data.get('tags')
-    #     if len(tags) == 0:
-    #         raise serializers.ValidationError('Add at least 1 tag')
-    #     return data
+    def validate_tags(self, data):
+        tags = self.initial_data.get('tags')
+        if len(tags) == 0:
+            raise serializers.ValidationError('Add at least 1 tag')
+        return data
 
-    # def validate_ingredients(self, data):
-    #     ingredients = self.initial_data.get('ingredients')
-    #     if not ingredients:
-    #         raise ValidationError('You have to select at least 1 ingredient')
-    #     for ingredient in ingredients:
-    #         if int(ingredient['amount']) <= 0:
-    #             raise ValidationError('Ingredient amount must be > 0')
-    #     return data
+    def validate_ingredients(self, data):
+        ingredients = self.initial_data.get('ingredients')
+        if not ingredients:
+            raise ValidationError('You have to select at least 1 ingredient')
+        for ingredient in ingredients:
+            if int(ingredient['amount']) <= 0:
+                raise ValidationError('Ingredient amount must be > 0')
+        return data
 
     def create_tags(self, tags, recipe):
-        for tag_id in tags:
-            tag = get_object_or_404(Tag, id=tag_id)
+        for tag in tags:
+            # tag = get_object_or_404(Tag, id=tag_id)
             RecipeTag.objects.create(recipe=recipe, tag=tag)
 
     def update_tags(self, tags, recipe):
