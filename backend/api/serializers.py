@@ -36,13 +36,21 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
+class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all()
+    )
+    amount = serializers.IntegerField()
+
+    class Meta:
+        model = IngredientAmountInRecipe
+        fields = ('id', 'amount')
+
+
 class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
-    ingredients = IngredientAmountInRecipeSerializer(
-        source='ingredientamountinrecipe_set',
-        many=True
-    )
+    ingredients = AddIngredientToRecipeSerializer(many=True)
     image = Base64ImageField()
     name = serializers.CharField(required=False)
     text = serializers.CharField(required=False)
