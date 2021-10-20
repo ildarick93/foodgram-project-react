@@ -90,13 +90,6 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
                 recipe=recipe
             )
 
-    # def create_ingredients(self, ingredients, recipe):
-    #     for ingredient in ingredients:
-    #         new_ingredient = get_object_or_404(Ingredient, id=ingredient['id'])
-    #         new_ingredient.amount = ingredient['amount']
-    #         new_ingredient.save()
-    #         recipe.ingredients.add(new_ingredient)
-    #     return recipe
 
     def update_ingredients(self, ingredients, recipe):
         IngredientAmountInRecipe.objects.filter(recipe=recipe).delete()
