@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -13,6 +15,8 @@ from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
 from .serializers import (CreateUpdateRecipeSerializer, IngredientSerializer,
                           RecipeSerializer, TagSerializer)
 from .utils import add_file_to_response, form_shop_list
+
+test = logging.getLogger
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
