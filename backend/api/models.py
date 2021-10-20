@@ -53,7 +53,7 @@ class Recipe(Model):
         Ingredient,
         through='IngredientAmountInRecipe',
         related_name='recipes',
-        verbose_name='Ingredients'
+        verbose_name='Ingredients',
     )
     tags = ManyToManyField(
         Tag,
@@ -87,12 +87,14 @@ class IngredientAmountInRecipe(Model):
     ingredient = ForeignKey(
         Ingredient,
         on_delete=CASCADE,
-        verbose_name='Name of ingredient'
+        verbose_name='Name of ingredient',
+        related_name='ingredients_amount'
     )
     recipe = ForeignKey(
         Recipe,
         on_delete=CASCADE,
-        verbose_name='Name of recipe'
+        verbose_name='Name of recipe',
+        related_name='ingredients_amount'
     )
     amount = PositiveIntegerField(
         validators=[MinValueValidator(1, 'Ingredient amount must be > 0')],
