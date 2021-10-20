@@ -90,7 +90,6 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
                 recipe=recipe
             )
 
-
     def update_ingredients(self, ingredients, recipe):
         IngredientAmountInRecipe.objects.filter(recipe=recipe).delete()
         self.create_ingredients(ingredients, recipe)
