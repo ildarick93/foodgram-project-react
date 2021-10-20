@@ -129,7 +129,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     image = Base64ImageField()
     ingredients = IngredientAmountInRecipeSerializer(
-        source='ingredientamountinrecipe_set',
+        source='ingredients_amount',
         many=True
     )
     author = CustomUserSerializer(read_only=True)
