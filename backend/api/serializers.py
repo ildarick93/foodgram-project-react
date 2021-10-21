@@ -93,7 +93,7 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             IngredientAmountInRecipe.objects.create(
                 ingredient=ingredient['id'],
-                amount=10,  # ingredient['amount']
+                amount=ingredient.get('amount'),  # ingredient['amount']
                 recipe=recipe
             )
 
