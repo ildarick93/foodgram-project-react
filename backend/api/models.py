@@ -88,11 +88,13 @@ class IngredientAmountInRecipe(Model):
         Ingredient,
         on_delete=CASCADE,
         verbose_name='Name of ingredient',
+        related_name='ingredients_amount'
     )
     recipe = ForeignKey(
         Recipe,
         on_delete=CASCADE,
         verbose_name='Name of recipe',
+        related_name='ingredients_amount'
     )
     amount = PositiveIntegerField(
         validators=[MinValueValidator(1, 'Ingredient amount must be > 0')],
