@@ -36,7 +36,7 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
-    # serializer_class = RecipeSerializer  # full
+    serializer_class = RecipeSerializer  # full
     permission_classes = [OwnerOrAdminOrAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
@@ -86,7 +86,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         data = form_shop_list(results)
         return add_file_to_response(data, 'text/plain')
 
-    def get_serializer_class(self):
-        if self.action in ['create', 'partial_update']:
-            return CreateUpdateRecipeSerializer(many=True)
-        return RecipeSerializer
+    def do_nothing():
+        return CreateUpdateRecipeSerializer
+    # def get_serializer_class(self):
+    #     if self.action in ['create', 'partial_update']:
+    #         return CreateUpdateRecipeSerializer
+    #     return RecipeSerializer
