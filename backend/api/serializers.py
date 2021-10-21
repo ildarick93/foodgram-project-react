@@ -39,6 +39,7 @@ class IngredientAmountInRecipeSerializer(serializers.ModelSerializer):
 
 class AddIngredientToRecipeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='ingredient.id')
+    # id=serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
     amount = serializers.IntegerField()
 
     class Meta:
@@ -50,7 +51,7 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
     ingredients = AddIngredientToRecipeSerializer(
-        # source='ingredientamountinrecipe_set',
+        source='ingredients_amount',
         many=True
     )
     image = Base64ImageField()
@@ -92,8 +93,7 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
 
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            # ingredient_id, amount = ingredient['id'], ingredient['amount']
-            ingredient_id, amount = 1, ingredient['amount']
+            ingredient_id, amount = ingredient['id'], ingredient['amount']
             ingredient_obj = get_object_or_404(Ingredient, id=ingredient_id)
             IngredientAmountInRecipe.objects.create(
                 ingredient=ingredient_obj,
