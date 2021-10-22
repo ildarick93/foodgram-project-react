@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.models import F
 # from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -52,7 +53,6 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
     ingredients = AddIngredientToRecipeSerializer(
-        source='ingredients_amount',
         many=True
     )
     image = Base64ImageField()
@@ -92,13 +92,25 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
         RecipeTag.objects.filter(recipe=recipe).delete()
         self.create_tags(tags, recipe)
 
+    # def create_ingredients(self, ingredients, recipe):
+    #     for ingredient in ingredients:
+    #         IngredientAmountInRecipe.objects.create(
+    #             ingredient=ingredient['id'],
+    #             amount=ingredient.get('amount'),  # ingredient['amount']
+    #             recipe=recipe
+    #         )
+
     def create_ingredients(self, ingredients, recipe):
         for ingredient in ingredients:
-            IngredientAmountInRecipe.objects.create(
-                ingredient=ingredient['id'],
-                amount=ingredient.get('amount'),  # ingredient['amount']
-                recipe=recipe
-            )
+            ingredient_id = ingredient['id']
+            amount = ingredient['amount']
+            if IngredientAmountInRecipe.objects.filter(
+                recipe=recipe, ingredient=ingredient_id
+            ).exists():
+                amount += F('amount')
+            IngredientAmountInRecipe.objects.update_or_create(
+                recipe=recipe, ingredient=ingredient_id,
+                defaults={'amount': amount})
 
     def update_ingredients(self, ingredients, recipe):
         IngredientAmountInRecipe.objects.filter(recipe=recipe).delete()
