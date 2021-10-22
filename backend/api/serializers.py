@@ -81,48 +81,6 @@ class CreateUpdateRecipeSerializer(serializers.ModelSerializer):
                 raise ValidationError('Ingredient amount must be > 0')
         return data
 
-    # def create_tags(self, tags, recipe):
-    #     for tag in tags:
-    #         RecipeTag.objects.create(recipe=recipe, tag=tag)
-
-    # def update_tags(self, tags, recipe):
-    #     RecipeTag.objects.filter(recipe=recipe).delete()
-    #     self.create_tags(tags, recipe)
-
-    # def create_ingredients(self, ingredients, recipe):
-    #     for ingredient in ingredients:
-    #         ingredient_id = ingredient['id']
-    #         amount = ingredient['amount']
-    #         IngredientAmountInRecipe.objects.create(
-    #             ingredient=ingredient_id,
-    #             amount=amount,
-    #             recipe=recipe
-    #         )
-
-    # def update_ingredients(self, ingredients, recipe):
-    #     IngredientAmountInRecipe.objects.filter(recipe=recipe).delete()
-    #     self.create_ingredients(ingredients, recipe)
-
-    # def create(self, validated_data):
-    #     tags = validated_data.pop('tags')
-    #     ingredients = validated_data.pop('ingredients')
-    #     recipe = Recipe.objects.create(**validated_data)
-    #     self.create_tags(tags, recipe)
-    #     self.create_ingredients(ingredients, recipe)
-    #     return recipe
-
-    # def update(self, instance, validated_data):
-    #     tags = validated_data.pop('tags', False)
-    #     ingredients = validated_data.pop('ingredients', False)
-    #     for attr, value in validated_data.items():
-    #         setattr(instance, attr, value)
-    #     instance.save()
-    #     if tags:
-    #         self.update_tags(tags, instance)
-    #     if ingredients:
-    #         self.update_ingredients(ingredients, instance)
-    #     return instance
-
     def create(self, validated_data):
         author = self.context.get('request').user
         tags_data = validated_data.pop('tags')
