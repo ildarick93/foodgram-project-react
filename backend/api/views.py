@@ -1,5 +1,3 @@
-import logging
-
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -15,8 +13,6 @@ from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
 from .serializers import (CreateUpdateRecipeSerializer, IngredientSerializer,
                           RecipeSerializer, TagSerializer)
 from .utils import add_file_to_response, form_shop_list
-
-test = logging.getLogger
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -36,7 +32,6 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
-    # serializer_class = RecipeSerializer  # full
     permission_classes = [OwnerOrAdminOrAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
@@ -44,8 +39,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return CreateUpdateRecipeSerializer
         return RecipeSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)
 
     def _create_link(self, request, model):
         object = get_object_or_404(Recipe, pk=self.kwargs['pk'])
