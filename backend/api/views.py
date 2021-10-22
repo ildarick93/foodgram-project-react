@@ -1,7 +1,7 @@
 import logging
 
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -12,10 +12,8 @@ from .filters import CustomSearchFilter, RecipeFilter
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
                      Recipe, ShoppingList, Tag)
 from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
-from .serializers import (CreateUpdateRecipeSerializer,
-                          IngredientAmountInRecipeSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          TagSerializer)
+from .serializers import (CreateUpdateRecipeSerializer, IngredientSerializer,
+                          RecipeSerializer, TagSerializer)
 from .utils import add_file_to_response, form_shop_list
 
 test = logging.getLogger
@@ -33,11 +31,6 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = None
     filter_backends = [CustomSearchFilter]
     search_fields = ['^name']
-
-
-class IngredientAmountInRecipeView(generics.ListAPIView):
-    queryset = IngredientAmountInRecipe.objects.all()
-    serializer_class = IngredientAmountInRecipeSerializer
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
