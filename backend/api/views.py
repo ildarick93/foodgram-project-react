@@ -1,7 +1,7 @@
 import logging
 
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -12,8 +12,10 @@ from .filters import CustomSearchFilter, RecipeFilter
 from .models import (FavoriteRecipe, Ingredient, IngredientAmountInRecipe,
                      Recipe, ShoppingList, Tag)
 from .permissions import OwnerOrAdminOrAuthenticatedOrReadOnly
-from .serializers import (CreateUpdateRecipeSerializer, IngredientSerializer,
-                          RecipeSerializer, TagSerializer)
+from .serializers import (CreateUpdateRecipeSerializer,
+                          IngredientAmountInRecipeSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          TagSerializer)
 from .utils import add_file_to_response, form_shop_list
 
 test = logging.getLogger
@@ -33,11 +35,21 @@ class IngredientsViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['^name']
 
 
+class IngredientAmountInRecipeView(generics.ListAPIView):
+    queryset = IngredientAmountInRecipe.objects.all()
+    serializer_class = IngredientAmountInRecipeSerializer
+
+
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filterset_class = RecipeFilter
     # serializer_class = RecipeSerializer  # full
     permission_classes = [OwnerOrAdminOrAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'partial_update']:
+            return CreateUpdateRecipeSerializer
+        return RecipeSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -48,7 +60,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         existance = model.objects.filter(user=user, recipe=object).exists()
         if not existance:
             model.objects.create(user=user, recipe=object)
-            serializer = RecipeLiteSerializer(object)  # lite
+            serializer = RecipeLiteSerializer(object)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             raise ValidationError({'errors': 'Already exists'})
@@ -85,8 +97,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).select_related('recipe').select_related('ingredient')
         data = form_shop_list(results)
         return add_file_to_response(data, 'text/plain')
-
-    def get_serializer_class(self):
-        if self.action in ['create', 'partial_update']:
-            return CreateUpdateRecipeSerializer
-        return RecipeSerializer
